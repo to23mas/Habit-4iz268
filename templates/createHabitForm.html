@@ -1,0 +1,69 @@
+<div class="myTile container">
+<br>
+
+<div id="create" class="row row-cols-lg-auto g-3 align-items-center">
+  
+	<div class="col-12">
+    <label class="" for="habitid">habit name:</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="habitid" placeholder="">
+    </div>
+  </div>
+
+	<div class="col-12">
+    <label class="" for="unittype">units:</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="unittype" placeholder="">
+    </div>
+  </div>
+
+  <div class="col-12">
+    <label class="" for="colour">colour: </label>
+    <select class="form-select" id="colour">
+      <option selected>choose color</option>
+      <option value="shibafu">green</option>
+      <option value="momiji">red</option>
+      <option value="sora">blue</option>
+      <option value="ichou">yellow</option>
+      <option value="ajisai">purple</option>
+      <option value="kuro">black</option>
+    </select>
+  </div>
+
+  <div class="col-12">
+    <button type="submit" onclick="createHabit()" class="btn btn-primary">create habit</button>
+  </div>
+</div>
+</div>
+
+<script>
+
+  function createHabit() {
+    let user = localStorage.getItem('username');
+    fetch('https://pixe.la/v1/users/' +  user + '/graphs' , {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'X-USER-TOKEN':'thisissecret'
+			},
+			body: JSON.stringify({ 
+				"id":   $('#habitid').val(),
+				"name": $('#habitid').val(),
+				"unit": $('#unittype').val(),
+				"type": "int",
+        "timezone": "Europe/Prague",
+				"color": $('#colour').val()
+			})
+		})
+		.then(response => response.json())
+		.then(response => {
+			if (JSON.stringify(response.isSuccess) == 'false'){
+				showMessage('api', 'danger', response.message);
+			}else {
+				showMessage('api ', 'success',   $('#habitid').val() + ' Was created.');
+			}
+		});
+	}
+
+</script>

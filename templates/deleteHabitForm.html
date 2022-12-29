@@ -1,0 +1,86 @@
+<div class="myTile container">
+  <br>
+  <div id="create" class="row row-cols-lg-auto g-3 align-items-center">
+  
+  
+    <div class="col-12">
+      <label class="" for="habitId">Your Habits: </label>
+      <select id="habitsId" class="form-select">
+        
+      </select>
+    </div>
+
+  <div class="col-12">
+    <button type="submit" onclick="deleteHabit()" class="btn btn-primary">Delete Habit</button>
+  </div>
+</div>
+</div>
+
+<script>
+  async function getAllIdsForForm() {
+  let user = localStorage.getItem('username');
+  $('#loading').empty();
+  $('#loading').append('<img class="loadingWheel" src="./images/hug.gif">');
+   const response = await fetch('https://pixe.la/v1/users/' + user + '/graphs' , {
+     method: 'GET',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+       'X-USER-TOKEN':'thisissecret'
+   }});
+
+   let data = await response.json();
+   try {
+    ids =  data.graphs.map( (graph) => graph.id );
+    show(ids);
+  } catch (e) { 
+    let message = 'There is problem on the API provider side, please repeat action !'
+	  showMessage('api', 'danger', message);
+
+	  $('#loading').empty();
+  }
+}
+  function show(data) {
+    
+    data.forEach(id => {
+      $('#habitsId').append('<option value="' + id +'">' + id +'</option>');
+    });
+
+    $('#loading').empty();
+  }
+  
+  function deleteHabit() {
+    
+    let user = localStorage.getItem('username');
+
+    let id = getIdFromForm();
+    
+		fetch('https://pixe.la/v1/users/' + user  + '/graphs/' + id, {
+			method: 'DELETE',
+			headers: {
+				'Accept': 'application/json',
+				'X-USER-TOKEN':'thisissecret'
+			}
+		})
+		.then(response => response.json())
+		.then(response => {
+			if (JSON.stringify(response.isSuccess) == 'false'){
+				showMessage('api', 'danger', response.message);
+			}else {
+				
+				let message = 'Habit <strong>'+id+'</strong> was deleted.';
+		    showMessage('api', 'success', message);
+			}
+      $('#habitsId').empty();
+		});
+     getAllIdsForForm();
+	};
+
+  function getIdFromForm(){
+      return $('#habitsId').val();
+  }
+
+
+  getAllIdsForForm();
+  
+</script>

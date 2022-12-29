@@ -1,0 +1,35 @@
+
+<div class="myTile">
+
+  <h1 class="centerContent"> ALL MY HABITS </h1>
+
+  <div id="svg">
+ 
+  </div>
+  
+</div>
+
+<script>
+
+  function runAllMyhabits() {
+    let user = localStorage.getItem('username');
+    clearElement('loading');
+    clearElement('svg');
+    $('#loading').append('<img class="loadingWheel" src="./images/hug.gif">');
+
+    getAllIds(user);
+   
+  }
+
+  function editPixel(graphId, option) {
+    let user = localStorage.getItem('username');
+    updatePixelByOne(user, graphId, option)
+    runAllMyhabits();
+  }
+
+  clearElement('svg');
+  runAllMyhabits();
+
+
+</script>
+

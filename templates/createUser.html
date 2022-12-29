@@ -1,0 +1,44 @@
+<div class="myTile p-4">
+	<div class="container">
+		<div class="row">
+			<div class="col-6 text-end">
+				<button type="submit" onclick="loginForm()" class="btn btn-primary">login</button>
+			</div>
+			<div class="col-6 text-start">
+				<button type="submit" onclick="registerForm()" class="btn btn-secondary">register</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="userForms" class="container">	</div>
+
+
+</div>
+
+
+<script>
+function loginForm(){
+	clearElement('userForms');
+	let form = createUserLoginForm();
+	appendElement('userForms', form);
+}
+
+function registerForm(){
+	clearElement('userForms');
+	let form = createUserRegisterForm();
+	appendElement('userForms', form);
+}
+
+function logMeIn() {
+	let username = $('#username').val();
+	userExists(username);
+}
+function registerMe() {
+	let username = $('#username').val();
+	createUser(username);
+}
+
+
+	
+</script>
